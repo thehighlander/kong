@@ -684,7 +684,15 @@ function _M.new(apis)
 
 
     if new_uri ~= uri then
-      ngx.req.set_uri(new_uri)
+      -- ngx.req.set_uri sets 'r->internal = 1', which will make
+      -- ngx_http_proxy_module escape it before proxying.
+      -- We thus need to unescape it first, to prevent double
+      -- percent-encoding.
+      -- TODO: Nginx's escaping and ngx_lua's unescaping don't
+      -- encode/decode the same sets of characters.
+      local unescaped_uri = ngx.unescape_uri(new_uri)
+
+      ngx.req.set_uri(unescaped_uri)
     end
 
 
