@@ -18,10 +18,7 @@ local oflags = bit.bor(O_WRONLY, O_CREAT, O_APPEND)
 local mode = bit.bor(S_IRUSR, S_IWUSR, S_IRGRP, S_IROTH)
 
 ffi.cdef[[
-int open(char * filename, int flags, int mode);
 int write(int fd, void * ptr, int numbytes);
-int close(int fd);
-char *strerror(int errnum);
 ]]
 
 local function string_to_char(str)
